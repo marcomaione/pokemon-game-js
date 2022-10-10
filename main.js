@@ -3,14 +3,51 @@ const canvas = document.querySelector('canvas');
 
 const c = canvas.getContext('2d');
 
-console.log(muro);
-
 //  misure in pixel alla mappa di gioco
 canvas.width = 1024
 canvas.height = 576
 
-c.fillStyle = 'white'
-c.fillRect(0, 0, canvas.width, canvas.height);
+// aggiungo il muro nella mappa
+const muroMappa =[]
+
+for (let i = 0; i<muro.length; i += 70 ) {
+    muroMappa.push(muro.slice(i, 70 + i))
+}
+
+class Confine {
+    static width = 48
+    static height = 48
+    constructor(position) {
+        this.position = position
+        this.width = 48
+        this.height = 48
+    }
+
+    draw() {
+        c.fillStyle = 'red'
+        c.fillRect(this.position.x, this.position.y, this.width, this.height )
+    }
+}
+
+const confini = []
+const offset = {
+    x: -590,
+    y: -300
+}
+
+muroMappa.forEach((row, i) => {
+    row.forEach((simbolo, j) => {
+        if ( simbolo === 1025)
+        confini.push(
+            new Confine({
+                position: {
+                x: j * Confine.width + offset.x,
+                y: i * Confine.height + offset.y
+                }
+            })
+        )
+    })
+})
 
 // importo la mappa ed il person di gioco
 
@@ -33,8 +70,8 @@ class Sprite {
 
 const background = new Sprite({
     position: {
-    x: -590,
-    y: -300
+    x: offset.x,
+    y: offset.y
     },
     image: image
 })
@@ -58,6 +95,9 @@ const keys = {
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
+    confini.forEach(confine => {
+        confine.draw()
+    })
     c.drawImage(
         playerImage,
         0,
