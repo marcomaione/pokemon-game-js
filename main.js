@@ -37,6 +37,20 @@ const background = new Sprite({
     image: image
 })
 
+const keys = {
+    w: {
+        pressed: false
+    },
+    a: {
+        pressed: false
+    },
+    s: {
+        pressed: false
+    },
+    d: {
+        pressed: false
+    }
+}
 // vado ad posizionare il player sulla mappa e avvio loop animazione personaggio 
 
 function animate() {
@@ -53,7 +67,7 @@ function animate() {
         playerImage.width / 4,
         playerImage.height
     )
-    
+    // if () 
 }
 animate()
 
@@ -64,21 +78,22 @@ window.addEventListener('keydown', (e) => {
     
     switch (e.key) {
         case 'w':
-            console.log('premuto w key')
+            keys.w.pressed = true
         break
 
         case 'a':
-            console.log('premuto a key')
+            keys.a.pressed = true
         break
 
         case 's':
-            console.log('premuto s key')
+            keys.s.pressed = true
         break
 
         case 'd':
-            console.log('premuto d key')
+            keys.d.pressed = true
         break
     }
+    console.log(keys);
 })
 
 
