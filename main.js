@@ -28,7 +28,7 @@ class Confine {
         c.fillRect(this.position.x, this.position.y, this.width, this.height )
     }
 }
-console.log()
+
 
 const confini = []
 const offset = {
@@ -92,13 +92,20 @@ const keys = {
     }
 }
 // vado ad posizionare il player sulla mappa e avvio loop animazione personaggio 
-
+const testConfine =new Confine({
+    position: {
+       x: 400,
+       y: 400 
+    }
+}) 
+const movables = [background, testConfine]
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
-    confini.forEach(confine => {
-        confine.draw()
-    })
+    // confini.forEach(confine => {
+    //     confine.draw()
+    // })
+    testConfine.draw()
     c.drawImage(
         playerImage,
         0,
@@ -111,10 +118,26 @@ function animate() {
         playerImage.height
     )
     //  if (keys.w.pressed) background.position.y = background.position.y + 3// formula non abbreviata per muovere il personaggio
-    if (keys.w.pressed && lastKey === 'w') background.position.y += 3
-    else if (keys.a.pressed && lastKey === 'a') background.position.x += 3
-    else if (keys.s.pressed && lastKey === 's') background.position.y -= 3
-    else if (keys.d.pressed && lastKey === 'd') background.position.x -= 3 
+    if (keys.w.pressed && lastKey === 'w') {
+        movables.forEach((movable) => {
+            movable.position.y += 3
+        })
+    }
+    else if (keys.a.pressed && lastKey === 'a') {
+        movables.forEach((movable) => {
+            movable.position.x += 3
+        })
+    }
+    else if (keys.s.pressed && lastKey === 's') {
+        movables.forEach((movable) => {
+            movable.position.y -= 3
+        })
+    }
+    else if (keys.d.pressed && lastKey === 'd') {
+        movables.forEach((movable) => {
+            movable.position.x -= 3
+        })
+    }
 }
 animate()
 
