@@ -24,7 +24,7 @@ class Confine {
     }
 
     draw() {
-        c.fillStyle = 'red'
+        c.fillStyle = 'rgba(255, 0, 0, 0.0)'
         c.fillRect(this.position.x, this.position.y, this.width, this.height )
     }
 }
@@ -63,18 +63,17 @@ class Sprite {
     constructor({position, velocity, image, frames = { max: 1} }) {
         this.position = position
         this.image = image
-        this.frames = frames
+        this.frames = {...frames, val: 0, elapsed: 0 }
         this.image.onload = () => {
             this.width = this.image.width / this.frames.max
             this.height = this.image.height
-            // console.log(this.width)
-            // console.log(this.height)
         }
+        this.moving = false
     }
     draw() {
         c.drawImage(
             this.image,
-            0,
+            this.frames.val * this.width,
             0,
             this.image.width / this.frames.max,
             this.image.height,
@@ -83,6 +82,14 @@ class Sprite {
             this.image.width / this.frames.max,
             this.image.height
         )
+        if (!this.moving) return
+        if (this.frames.max > 1) {
+            this.frames.elapsed++
+        }
+        if (this.frames.elapsed % 10 === 0) {
+        if (this.frames.val < this.frames.max - 1) this.frames.val++
+        else this.frames.val = 0
+        }
     }
 }
 
@@ -142,7 +149,9 @@ function animate() {
     
     //  if (keys.w.pressed) background.position.y = background.position.y + 3// formula non abbreviata per muovere il personaggio
     let moving = true
+    player.moving = false
     if (keys.w.pressed && lastKey === 'w') {
+        player.moving = true
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
             if(
@@ -165,6 +174,7 @@ function animate() {
         })
     }
     else if (keys.a.pressed && lastKey === 'a') {
+        player.moving = true
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
             if(
@@ -187,6 +197,7 @@ function animate() {
         })
     }
     else if (keys.s.pressed && lastKey === 's') {
+        player.moving = true
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
             if(
@@ -209,6 +220,7 @@ function animate() {
         })
     }
     else if (keys.d.pressed && lastKey === 'd') {
+        player.moving = true
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
             if(
