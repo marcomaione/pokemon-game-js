@@ -60,14 +60,43 @@ playerImage.src = './img/playerDown.png'
 
 // creo una classe per il movimento del personaggio
 class Sprite {
-    constructor({position, velocity, image}) {
+    constructor({position, velocity, image, frames = { max: 1} }) {
         this.position = position
         this.image = image
+        this.frames = frames
+        this.image.onload = () => {
+            this.width = this.image.width / this.frames.max
+            this.height = this.image.height
+            // console.log(this.width)
+            // console.log(this.height)
+        }
     }
     draw() {
-    c.drawImage(this.image, this.position.x, this.position.y)
+        c.drawImage(
+            this.image,
+            0,
+            0,
+            this.image.width / this.frames.max,
+            this.image.height,
+            this.position.x,
+            this.position.y,
+            this.image.width / this.frames.max,
+            this.image.height
+        )
     }
 }
+
+const player = new Sprite({
+    position: {
+        x: canvas.width / 2 - 192 / 4 / 2,
+        y: canvas.height / 2 - 68 / 2
+    },
+    image: playerImage,
+    frames: {
+        max: 4
+    }
+})
+
 
 const background = new Sprite({
     position: {
@@ -92,48 +121,111 @@ const keys = {
     }
 }
 // vado ad posizionare il player sulla mappa e avvio loop animazione personaggio 
-const testConfine =new Confine({
-    position: {
-       x: 400,
-       y: 400 
-    }
-}) 
-const movables = [background, testConfine]
+
+const movables = [background, ...confini]
+
+function rectangularCollision ({rectangle1, rectangle2}) {
+    return(
+        rectangle1.position.x + rectangle1.width >= rectangle2.position.x &&
+        rectangle1.position.x <= rectangle2.position.x + rectangle2.width &&
+        rectangle1.position.y <= rectangle2.position.y + rectangle2.height &&
+        rectangle1.position.y + rectangle1.height >= rectangle2.position.y)
+
+}
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
-    // confini.forEach(confine => {
-    //     confine.draw()
-    // })
-    testConfine.draw()
-    c.drawImage(
-        playerImage,
-        0,
-        0,
-        playerImage.width / 4,
-        playerImage.height,
-        canvas.width / 2 - (playerImage.width / 4) / 2,
-        canvas.height / 2 - playerImage.height / 2,
-        playerImage.width / 4,
-        playerImage.height
-    )
+     confini.forEach(confine => {
+        confine.draw()
+    })
+    player.draw()
+    
     //  if (keys.w.pressed) background.position.y = background.position.y + 3// formula non abbreviata per muovere il personaggio
+    let moving = true
     if (keys.w.pressed && lastKey === 'w') {
+        for (let i = 0; i < confini.length; i++) {
+            const confine = confini[i]
+            if(
+                rectangularCollision({
+                    rectangle1 : player,
+                    rectangle2: {...confine, position:{
+                        x: confine.position.x ,
+                        y: confine.position.y + 3
+                    }}
+                })
+            ) {
+                console.log('')
+                moving = false
+                break
+            }
+        }
+        if(moving)
         movables.forEach((movable) => {
             movable.position.y += 3
         })
     }
     else if (keys.a.pressed && lastKey === 'a') {
+        for (let i = 0; i < confini.length; i++) {
+            const confine = confini[i]
+            if(
+                rectangularCollision({
+                    rectangle1 : player,
+                    rectangle2: {...confine, position:{
+                        x: confine.position.x + 3,
+                        y: confine.position.y 
+                    }}
+                })
+            ) {
+                console.log('')
+                moving = false
+                break
+            }
+        }
+        if(moving)
         movables.forEach((movable) => {
             movable.position.x += 3
         })
     }
     else if (keys.s.pressed && lastKey === 's') {
+        for (let i = 0; i < confini.length; i++) {
+            const confine = confini[i]
+            if(
+                rectangularCollision({
+                    rectangle1 : player,
+                    rectangle2: {...confine, position:{
+                        x: confine.position.x,
+                        y: confine.position.y - 3
+                    }}
+                })
+            ) {
+                console.log('')
+                moving = false
+                break
+            }
+        }
+        if(moving)
         movables.forEach((movable) => {
             movable.position.y -= 3
         })
     }
     else if (keys.d.pressed && lastKey === 'd') {
+        for (let i = 0; i < confini.length; i++) {
+            const confine = confini[i]
+            if(
+                rectangularCollision({
+                    rectangle1 : player,
+                    rectangle2: {...confine, position:{
+                        x: confine.position.x - 3,
+                        y: confine.position.y
+                    }}
+                })
+            ) {
+                console.log('')
+                moving = false
+                break
+            }
+        }
+        if(moving)
         movables.forEach((movable) => {
             movable.position.x -= 3
         })
