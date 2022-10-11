@@ -1,28 +1,4 @@
-// indico dove sara visualizzata la mappa di gioco
-const canvas = document.querySelector('canvas');
-
-const c = canvas.getContext('2d');
-console.log(zonaBattagliaData)
-
-//  misure in pixel alla mappa di gioco
-canvas.width = 1024
-canvas.height = 576
-
-// aggiungo il muro nella mappa
-const muroMappa =[]
-for (let i = 0; i < muro.length; i += 70 ) {
-    muroMappa.push(muro.slice(i, 70 + i))
-}
-
-// aggiungo le zone di battaglia sulla mappa
-const zonaBattagliaMappa =[]
-for (let i = 0; i < zonaBattagliaData.length; i += 70 ) {
-    zonaBattagliaMappa.push(zonaBattagliaData.slice(i, 70 + i))
-}
-
-console.log(zonaBattagliaMappa)
-
-
+// creo le classi
 class Confine {
     static width = 48
     static height = 48
@@ -37,59 +13,6 @@ class Confine {
         c.fillRect(this.position.x, this.position.y, this.width, this.height )
     }
 }
-
-
-const confini = []
-const offset = {
-    x: -590 ,
-    y: -300
-}
-
-muroMappa.forEach((row, i) => {
-    row.forEach((simbolo, j) => {
-        if ( simbolo === 1025)
-        confini.push(
-            new Confine({
-                position: {
-                x: j * Confine.width + offset.x,
-                y: i * Confine.height + offset.y
-                }
-            })
-        )
-    })
-})
-
-// importo la mappa ed il person di gioco
-const zonaBattaglia = []
-zonaBattagliaMappa.forEach((row, i) => {
-    row.forEach((simbolo, j) => {
-        if ( simbolo === 1025)
-        zonaBattaglia.push(
-            new Confine({
-                position: {
-                x: j * Confine.width + offset.x,
-                y: i * Confine.height + offset.y
-                }
-            })
-        )
-    })
-})
-
-console.log(zonaBattaglia)
-const image = new Image();
-image.src = './img/mappa.png'
-
-const playerDownImage = new Image();
-playerDownImage.src = './img/playerDown.png'
-
-const playerUpImage = new Image();
-playerUpImage.src = './img/playerUp.png'
-
-const playerLeftImage = new Image();
-playerLeftImage.src = './img/playerLeft.png'
-
-const playerRightImage = new Image();
-playerRightImage.src = './img/playerRight.png'
 
 // creo una classe per il movimento del personaggio
 class Sprite {
@@ -127,6 +50,86 @@ class Sprite {
     }
 }
 
+
+
+
+// indico dove sara visualizzata la mappa di gioco
+const canvas = document.querySelector('canvas');
+
+const c = canvas.getContext('2d');
+console.log(battleZonesData)
+
+//  misure in pixel alla mappa di gioco
+canvas.width = 1024
+canvas.height = 576
+
+// aggiungo il muro nella mappa
+const muroMappa =[]
+for (let i = 0; i < muro.length; i += 70 ) {
+    muroMappa.push(muro.slice(i, 70 + i))
+}
+
+// aggiungo le zone di battaglia sulla mappa
+const battleZonesMap = []
+for (let i = 0; i < battleZonesData.length; i += 70 ) {
+    battleZonesMap.push(battleZonesData.slice(i, 70 + i))
+}
+console.log(battleZonesData)
+
+const confini = []
+const offset = {
+    x: -590 ,
+    y: -300
+}
+
+muroMappa.forEach((row, i) => {
+    row.forEach((simbolo, j) => {
+        if ( simbolo === 1025)
+        confini.push(
+            new Confine({
+                position: {
+                x: j * Confine.width + offset.x,
+                y: i * Confine.height + offset.y
+                }
+            })
+        )
+    })
+})
+
+// importo la mappa ed il person di gioco
+const battleZones = []
+
+battleZonesMap.forEach((row, i) => {
+    row.forEach((simbolo, j) => {
+        if ( simbolo === 1025)
+        battleZones.push(
+            new Confine({
+                position: {
+                x: j * Confine.width + offset.x,
+                y: i * Confine.height + offset.y
+                }
+            })
+        )
+    })
+})
+
+console.log(battleZones)
+
+const image = new Image();
+image.src = './img/mappa.png'
+
+const playerDownImage = new Image();
+playerDownImage.src = './img/playerDown.png'
+
+const playerUpImage = new Image();
+playerUpImage.src = './img/playerUp.png'
+
+const playerLeftImage = new Image();
+playerLeftImage.src = './img/playerLeft.png'
+
+const playerRightImage = new Image();
+playerRightImage.src = './img/playerRight.png'
+
 const player = new Sprite({
     position: {
         x: canvas.width / 2 - 192 / 4 / 2,
@@ -143,9 +146,6 @@ const player = new Sprite({
         down: playerDownImage
     }
 })
-
-console.log(player)
-
 
 const background = new Sprite({
     position: {
@@ -171,7 +171,7 @@ const keys = {
 }
 // vado ad posizionare il player sulla mappa e avvio loop animazione personaggio 
 
-const movables = [background, ...confini, ...zonaBattaglia]
+const movables = [background, ...confini, ...battleZones]
 
 function rectangularCollision ({rectangle1, rectangle2}) {
     return(
@@ -187,8 +187,8 @@ function animate() {
      confini.forEach(confine => {
         confine.draw()
     })
-    zonaBattaglia.forEach(zonaBattaglia => {
-        zonaBattaglia.draw()
+    battleZones.forEach(battleZone => {
+        battleZone.draw()
     })
     player.draw()
     
@@ -209,8 +209,20 @@ function animate() {
                     }}
                 })
             ) {
-                console.log('')
                 moving = false
+                break
+            }
+        }
+
+        for (let i = 0; i < battleZones.length; i++) {
+            const battleZone = battleZones[i]
+            if(
+                rectangularCollision({
+                    rectangle1 : player,
+                    rectangle2 : battleZone
+                })
+            ) {
+                console.log('zona battaglias')
                 break
             }
         }
@@ -344,6 +356,8 @@ window.addEventListener('keyup', (e) => {
     }
 
 })
+
+
 
 
 
