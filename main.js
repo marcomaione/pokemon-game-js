@@ -10,14 +10,14 @@ canvas.height = 576
 // aggiungo il muro nella mappa
 const muroMappa =[]
 
-for (let i = 0; i<muro.length; i += 70 ) {
+for (let i = 0; i < muro.length; i += 70 ) {
     muroMappa.push(muro.slice(i, 70 + i))
 }
 
 class Confine {
     static width = 48
     static height = 48
-    constructor(position) {
+    constructor({position}) {
         this.position = position
         this.width = 48
         this.height = 48
@@ -28,10 +28,11 @@ class Confine {
         c.fillRect(this.position.x, this.position.y, this.width, this.height )
     }
 }
+console.log()
 
 const confini = []
 const offset = {
-    x: -590,
+    x: -590 ,
     y: -300
 }
 
@@ -143,7 +144,7 @@ window.addEventListener('keydown', (e) => {
             lastKey = 'd'
         break
     }
-    console.log(keys);
+
 })
 
 window.addEventListener('keyup', (e) => {
@@ -165,7 +166,7 @@ window.addEventListener('keyup', (e) => {
             keys.d.pressed = false
         break
     }
-    console.log(keys);
+
 })
 
 
