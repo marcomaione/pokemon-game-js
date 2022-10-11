@@ -181,6 +181,10 @@ function rectangularCollision ({rectangle1, rectangle2}) {
         rectangle1.position.y + rectangle1.height >= rectangle2.position.y)
 
 }
+
+const battle = {
+    initiated: false
+}
 function animate() {
     window.requestAnimationFrame(animate)
     background.draw()
@@ -192,10 +196,12 @@ function animate() {
     })
     player.draw()
 
+    if (battle.initiated) return
+    // attivazione zona dellamappa dove si possono trovare nemici e combattere
     if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
         for (let i = 0; i < battleZones.length; i++) {
             const battleZone = battleZones[i]
-            // non ho capito come funziona ma funnziona
+            // non ho capito come funziona ma funziona
             const overlappingArea = 
             (Math.min(
                 player.position.x + player.width,
@@ -215,7 +221,8 @@ function animate() {
                 overlappingArea > (player.width * player.height) / 2 &&
                 Math.random() < 0.01
             ) {
-                console.log('zona battaglia')
+                console.log('activate battle')
+                battle.initiated = true
                 break
             }
         }
