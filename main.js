@@ -191,6 +191,35 @@ function animate() {
         battleZone.draw()
     })
     player.draw()
+
+    if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
+        for (let i = 0; i < battleZones.length; i++) {
+            const battleZone = battleZones[i]
+            // non ho capito come funziona ma funnziona
+            const overlappingArea = 
+            (Math.min(
+                player.position.x + player.width,
+                battleZone.position.x + battleZone.width
+              ) -
+                Math.max(player.position.x, battleZone.position.x)) *
+              (Math.min(
+                player.position.y + player.height,
+                battleZone.position.y + battleZone.height
+              ) -
+                Math.max(player.position.y, battleZone.position.y))
+            if(
+                rectangularCollision({
+                    rectangle1 : player,
+                    rectangle2 : battleZone
+                }) &&
+                overlappingArea > (player.width * player.height) / 2 &&
+                Math.random() < 0.01
+            ) {
+                console.log('zona battaglia')
+                break
+            }
+        }
+    }
     
     //  if (keys.w.pressed) background.position.y = background.position.y + 3// formula non abbreviata per muovere il personaggio
     let moving = true
@@ -214,18 +243,6 @@ function animate() {
             }
         }
 
-        for (let i = 0; i < battleZones.length; i++) {
-            const battleZone = battleZones[i]
-            if(
-                rectangularCollision({
-                    rectangle1 : player,
-                    rectangle2 : battleZone
-                })
-            ) {
-                console.log('zona battaglias')
-                break
-            }
-        }
         if(moving)
         movables.forEach((movable) => {
             movable.position.y += 3
