@@ -5,12 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Pokemon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Clicker+Script&family=Poppins:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+<title>Pokemon</title>
 </head>
 <body>
     <div class="container">
         <div id="overlappingDiv"></div>
+        <div class="status-enemy">
+            <h1>Draggle</h1>
+            <div class="barra-avanzamento">
+                <div class="barra-stato"></div>
+                <div class="barra-salute"></div>
+            </div>
+        </div>
+        <div class="status">
+            <h1>Emby</h1>
+            <div class="barra-avanzamento">
+                <div class="barra-stato"></div>
+                <div class="barra-salute"></div>
+            </div>
+        </div>
         <canvas></canvas>
+        <div class="menu-battle">
+            <div class="attack">
+                <button>attack</button>
+                <button>attack</button>
+            </div>
+            <div class="type">
+                <h1>Attack Type</h1>
+            </div>
+        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js" integrity="sha512-gmwBmiTVER57N3jYS3LinA9eb8aHrJua5iQD7yqYCKa5x6Jjc7VDVaEA0je0Lu0bP9j7tEjV3+1qUm6loO99Kw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="data/battleZones.js"></script>

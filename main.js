@@ -16,7 +16,13 @@ class Confine {
 
 // creo una classe per il movimento del personaggio
 class Sprite {
-    constructor({position, velocity, image, frames = { max: 1}, sprites  }) {
+    constructor({
+        position,
+        image,
+        frames = { max: 1, hold: 10},
+        sprites,
+        animate = false  
+        }) {
         this.position = position
         this.image = image
         this.frames = {...frames, val: 0, elapsed: 0 }
@@ -24,7 +30,7 @@ class Sprite {
             this.width = this.image.width / this.frames.max
             this.height = this.image.height
         }
-        this.moving = false
+        this.animate = animate
         this.sprites = sprites
     }
     draw() {
@@ -39,11 +45,11 @@ class Sprite {
             this.image.width / this.frames.max,
             this.image.height
         )
-        if (!this.moving) return
+        if (!this.animate) return
         if (this.frames.max > 1) {
             this.frames.elapsed++
         }
-        if (this.frames.elapsed % 10 === 0) {
+        if (this.frames.elapsed % this.frames.hold === 0) {
         if (this.frames.val < this.frames.max - 1) this.frames.val++
         else this.frames.val = 0
         }
@@ -136,7 +142,8 @@ const player = new Sprite({
     },
     image: playerDownImage,
     frames: {
-        max: 4
+        max: 4,
+        hold: 10
     },
     sprites: {
         up: playerUpImage,
@@ -197,7 +204,7 @@ function animate() {
     player.draw()
 
     let moving = true
-    player.moving = false
+    player.animate = false
     // console.log(animationId);
     if (battle.initiated) return
     // attivazione zona dellamappa dove si possono trovare nemici e combattere
@@ -237,10 +244,17 @@ function animate() {
                     onComplete() {
                         gsap.to('#overlappingDiv', {
                             opacity: 1,
-                            duration: 0.4
+                            duration: 0.4,
+                            onComplete() {
+                                // attivo una nuova animazio in loop
+                                animateBattle()
+                                gsap.to('#overlappingDiv', {
+                                    opacity: 0,
+                                    duration: 0.4,
+                                })
+                            }
                         })
 
-                        animateBattle()
                     }
                 })
                 break
@@ -251,7 +265,7 @@ function animate() {
     //  if (keys.w.pressed) background.position.y = background.position.y + 3// formula non abbreviata per muovere il personaggio
     
     if (keys.w.pressed && lastKey === 'w') {
-        player.moving = true
+        player.animate = true
         player.image = player.sprites.up
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
@@ -275,7 +289,7 @@ function animate() {
         })
     }
     else if (keys.a.pressed && lastKey === 'a') {
-        player.moving = true
+        player.animate = true
         player.image = player.sprites.left
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
@@ -299,7 +313,7 @@ function animate() {
         })
     }
     else if (keys.s.pressed && lastKey === 's') {
-        player.moving = true
+        player.animate = true
         player.image = player.sprites.down
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
@@ -323,7 +337,7 @@ function animate() {
         })
     }
     else if (keys.d.pressed && lastKey === 'd') {
-        player.moving = true
+        player.animate = true
         player.image = player.sprites.right
         for (let i = 0; i < confini.length; i++) {
             const confine = confini[i]
@@ -347,12 +361,57 @@ function animate() {
         })
     }
 }
-animate()
+// animate()
 
+// aggiungo il campo di battaglia
+const battleBackgroundImage = new Image()
+battleBackgroundImage.src = 'img/battleBackground.png'
+const battleBackground = new Sprite({
+    position: {
+        x: 0,
+        y: 0
+    },
+    image: battleBackgroundImage
+})
+// aggiungo i mostricciattoli sul campo di battaglia
+const draggleImage = new Image()
+draggleImage.src = 'img/draggleSprite.png'
+const draggle = new Sprite({
+    position: {
+        x: 800,
+        y: 100
+    },
+    image: draggleImage,
+    frames: {
+       max: 4,
+       hold: 30
+    },
+    animate: true
+})
+
+const embyImage = new Image()
+embyImage.src = 'img/embySprite.png'
+const emby = new Sprite({
+    position: {
+        x: 280,
+        y: 325
+    },
+    image: embyImage,
+    frames: {
+       max: 4,
+       hold: 30
+    },
+    animate: true
+})
+// funzione che inizializza la battaglia
 function animateBattle() {
     window.requestAnimationFrame(animateBattle)
-    console.log('inizio battaglia')
+    battleBackground.draw()
+    draggle.draw()
+    emby.draw()
 }
+// animate()
+animateBattle()
 
 // aggiungo la tastiera al gioco
 let lastKey = ''

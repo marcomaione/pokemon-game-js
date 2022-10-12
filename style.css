@@ -2,6 +2,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
 
 }
 
@@ -11,6 +12,11 @@ body {
     justify-content: center;
     align-items: center;
     padding-top: 100px;
+}
+
+button {
+    cursor: pointer;
+    font-size: 16px;
 }
 
 .container {
@@ -27,5 +33,70 @@ body {
     position: absolute;
     opacity: 0;
     pointer-events: none;
+}
+
+.status-enemy {
+    background-color: white;
+    width: 250px;
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    border: 4px black solid;
+    padding: 12px;
+}
+
+.status {
+    background-color: white;
+    width: 250px;
+    position: absolute;
+    top: 330px;
+    right: 50px;
+    border: 4px black solid;
+    padding: 12px;
+}
+
+.menu-battle {
+     background-color: white;
+     height: 140px;
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     right: 0;
+     border-top: solid 4px black;
+     display: flex;
+}
+
+.attack {
+    width: 66.66%;
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+}
+
+.type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 33.33%;
+    border-left: 4px black solid ;
+}
+.barra-avanzamento {
+    position: relative;
+}
+.barra-stato {
+    height: 5px;
+    background-color: #ccc;
+    margin-top: 10px;
+}
+.barra-salute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: green;
+}
+h1 {
+    margin: 0;
+    font-size: 16px;
 }
 
