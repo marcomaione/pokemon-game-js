@@ -57,7 +57,6 @@ class Sprite {
 const canvas = document.querySelector('canvas');
 
 const c = canvas.getContext('2d');
-console.log(battleZonesData)
 
 //  misure in pixel alla mappa di gioco
 canvas.width = 1024
@@ -186,7 +185,8 @@ const battle = {
     initiated: false
 }
 function animate() {
-    window.requestAnimationFrame(animate)
+    const animationId = window.requestAnimationFrame(animate)
+    
     background.draw()
      confini.forEach(confine => {
         confine.draw()
@@ -196,6 +196,9 @@ function animate() {
     })
     player.draw()
 
+    let moving = true
+    player.moving = false
+    // console.log(animationId);
     if (battle.initiated) return
     // attivazione zona dellamappa dove si possono trovare nemici e combattere
     if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
@@ -222,15 +225,31 @@ function animate() {
                 Math.random() < 0.01
             ) {
                 console.log('activate battle')
+                // disattiva animazione in loop
+                window.cancelAnimationFrame(animationId)
                 battle.initiated = true
+                // animazione tramite cdn gsap inizio battaglia
+                gsap.to('#overlappingDiv', {
+                    opacity: 1,
+                    repeat: 3,
+                    yoyo: true,
+                    duration: 0.5,
+                    onComplete() {
+                        gsap.to('#overlappingDiv', {
+                            opacity: 1,
+                            duration: 0.4
+                        })
+
+                        animateBattle()
+                    }
+                })
                 break
             }
         }
     }
     
     //  if (keys.w.pressed) background.position.y = background.position.y + 3// formula non abbreviata per muovere il personaggio
-    let moving = true
-    player.moving = false
+    
     if (keys.w.pressed && lastKey === 'w') {
         player.moving = true
         player.image = player.sprites.up
@@ -330,6 +349,10 @@ function animate() {
 }
 animate()
 
+function animateBattle() {
+    window.requestAnimationFrame(animateBattle)
+    console.log('inizio battaglia')
+}
 
 // aggiungo la tastiera al gioco
 let lastKey = ''
