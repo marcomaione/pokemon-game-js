@@ -22,7 +22,8 @@ class Sprite {
         frames = { max: 1, hold: 10},
         sprites,
         animate = false,
-        isEnemy = false
+        isEnemy = false,
+        rotation = 0
         }) {
         this.position = position
         this.image = image
@@ -36,6 +37,7 @@ class Sprite {
         this.opacity = 1
         this.health = 100
         this.isEnemy = isEnemy
+        this.rotation = rotation
     }
     draw() {
         c.save()
@@ -62,42 +64,85 @@ class Sprite {
         }
     }
     // movimento personaggio quando attacca
-    attack({attack, recipient}) {
-        const tl = gsap.timeline()
-
-        this.health -= attack.damage
-        let movementDistance = 20
-        if ( this.isEnemy) movementDistance = -20
+    attack({attack, recipient, renderedSprites}) {
         let healthBar = '#barra-salute-enemy'
         if (this.isEnemy) healthBar = '#barra-salute'
+        this.health -= attack.damage
+        switch (attack.name) {
+            case 'Fireball':
+                const fireballImage = new Image()
+                fireballImage.src = 'img/fireball.png'
+                const fireball = new Sprite({
+                    position: {
+                        x:this.position.x,
+                        y:this.position.y
+                    },
+                    image: fireballImage,
+                    frames: {
+                        max: 4,
+                        hold: 10
+                    },
+                    animate: true,
+                })
+                renderedSprites.splice(1, 0, fireball)
 
-        tl.to(this.position, {
-            x: this.position.x - movementDistance
-        }).to(this.position, {
-            x: this.position.x + movementDistance * 2,
-            duration: 0.1,
-            onComplete: () => {
-                // animazione vita che scende dopo il colpo
-                gsap.to(healthBar, {
-                    width: this.health + '%'
+                gsap.to(fireball.position, {
+                    x: recipient.position.x,
+                    y: recipient.position.y,
+                    onComplete: () => {
+                        gsap.to(healthBar, {
+                            width: this.health + '%'
+                        })
+                        gsap.to(recipient.position, {
+                            x: recipient.position.x + 10,
+                            yoyo: true,
+                            repeat: 5,
+                            duration: 0.08
+                        })
+                        gsap.to(recipient, {
+                            opacity: 0,
+                            repeat: 5,
+                            yoyo: true,
+                            duration: 0.08
+                        })
+                        renderedSprites.splice(1, 1)
+                    }
                 })
-                gsap.to(recipient.position, {
-                    x: recipient.position.x + 10,
-                    yoyo: true,
-                    repeat: 5,
-                    duration: 0.08
+                break
+            case 'Tackle':
+                const tl = gsap.timeline()
+                let movementDistance = 20
+                if ( this.isEnemy) movementDistance = -20
+                tl.to(this.position, {
+                    x: this.position.x - movementDistance
+                }).to(this.position, {
+                    x: this.position.x + movementDistance * 2,
+                    duration: 0.1,
+                    onComplete: () => {
+                        // animazione vita che scende dopo il colpo
+                        gsap.to(healthBar, {
+                            width: this.health + '%'
+                        })
+                        gsap.to(recipient.position, {
+                            x: recipient.position.x + 10,
+                            yoyo: true,
+                            repeat: 5,
+                            duration: 0.08
+                        })
+                        gsap.to(recipient, {
+                            opacity: 0,
+                            repeat: 5,
+                            yoyo: true,
+                            duration: 0.08
+                        })
+                    }
                 })
-                gsap.to(recipient, {
-                    opacity: 0,
-                    repeat: 5,
-                    yoyo: true,
-                    duration: 0.08
+                .to(this.position, {
+                    x: this.position.x 
                 })
-            }
-        })
-        .to(this.position, {
-            x: this.position.x 
-        })
+            break
+        }
+        
     }
 }
 
@@ -450,11 +495,13 @@ const emby = new Sprite({
     animate: true
 })
 // funzione che inizializza la battaglia
+const renderedSprites = [draggle, emby]
 function animateBattle() {
     window.requestAnimationFrame(animateBattle)
     battleBackground.draw()
-    draggle.draw()
-    emby.draw()
+    renderedSprites.forEach(sprite => {
+        sprite.draw()
+    })
 }
 // animate()
 animateBattle()
@@ -466,7 +513,8 @@ document.querySelectorAll('button').forEach((button) =>{
         const selectedAttack = attacks[e.currentTarget.innerHTML]
          emby.attack({
             attack: selectedAttack,
-         recipient: draggle
+            recipient: draggle,
+            renderedSprites
         })
     })
 })
