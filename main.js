@@ -14,7 +14,7 @@ class Confine {
     }
 }
 
-// creo una classe per il movimento del personaggio
+// creo una classe per il personaggio
 class Sprite {
     constructor({
         position,
@@ -23,7 +23,8 @@ class Sprite {
         sprites,
         animate = false,
         isEnemy = false,
-        rotation = 0
+        rotation = 0,
+        name
         }) {
         this.position = position
         this.image = image
@@ -38,6 +39,7 @@ class Sprite {
         this.health = 100
         this.isEnemy = isEnemy
         this.rotation = rotation
+        this.name = name
     }
     draw() {
         c.save()
@@ -65,6 +67,9 @@ class Sprite {
     }
     // movimento personaggio quando attacca
     attack({attack, recipient, renderedSprites}) {
+        document.querySelector('#boxDialoghi').style.display = 'block'
+        document.querySelector('#boxDialoghi').innerHTML = this.name +  ' usa '  + attack.name
+
         let healthBar = '#barra-salute-enemy'
         if (this.isEnemy) healthBar = '#barra-salute'
         this.health -= attack.damage
@@ -169,7 +174,7 @@ const battleZonesMap = []
 for (let i = 0; i < battleZonesData.length; i += 70 ) {
     battleZonesMap.push(battleZonesData.slice(i, 70 + i))
 }
-console.log(battleZonesData)
+// console.log(battleZonesData)
 
 const confini = []
 const offset = {
@@ -208,7 +213,7 @@ battleZonesMap.forEach((row, i) => {
     })
 })
 
-console.log(battleZones)
+// console.log(battleZones)
 // importo la mappa ed il person di gioco
 const image = new Image();
 image.src = './img/mappa.png'
@@ -321,7 +326,7 @@ function animate() {
                 overlappingArea > (player.width * player.height) / 2 &&
                 Math.random() < 0.01
             ) {
-                console.log('activate battle')
+                // console.log('activate battle')
                 // disattiva animazione in loop
                 window.cancelAnimationFrame(animationId)
                 battle.initiated = true
@@ -392,7 +397,7 @@ function animate() {
                     }}
                 })
             ) {
-                console.log('')
+                // console.log('')
                 moving = false
                 break
             }
@@ -416,7 +421,7 @@ function animate() {
                     }}
                 })
             ) {
-                console.log('')
+                // console.log('')
                 moving = false
                 break
             }
@@ -440,7 +445,7 @@ function animate() {
                     }}
                 })
             ) {
-                console.log('')
+                // console.log('')
                 moving = false
                 break
             }
@@ -451,73 +456,7 @@ function animate() {
         })
     }
 }
-// animate()
-
-// aggiungo il campo di battaglia
-const battleBackgroundImage = new Image()
-battleBackgroundImage.src = 'img/battleBackground.png'
-const battleBackground = new Sprite({
-    position: {
-        x: 0,
-        y: 0
-    },
-    image: battleBackgroundImage
-})
-// aggiungo i mostricciattoli sul campo di battaglia
-const draggleImage = new Image()
-draggleImage.src = 'img/draggleSprite.png'
-const draggle = new Sprite({
-    position: {
-        x: 800,
-        y: 100
-    },
-    image: draggleImage,
-    frames: {
-       max: 4,
-       hold: 30
-    },
-    animate: true,
-    isEnemy: true
-})
-
-const embyImage = new Image()
-embyImage.src = 'img/embySprite.png'
-const emby = new Sprite({
-    position: {
-        x: 280,
-        y: 325
-    },
-    image: embyImage,
-    frames: {
-       max: 4,
-       hold: 30
-    },
-    animate: true
-})
-// funzione che inizializza la battaglia
-const renderedSprites = [draggle, emby]
-function animateBattle() {
-    window.requestAnimationFrame(animateBattle)
-    battleBackground.draw()
-    renderedSprites.forEach(sprite => {
-        sprite.draw()
-    })
-}
-// animate()
-animateBattle()
-
-//ascoltatori di eventi per i nostri pulsanti(attacco)
-document.querySelectorAll('button').forEach((button) =>{
-    button.addEventListener('click', (e) => {
-        // creo una costante che al premere del pulsante usera l'attacco ad esso associato con relativo danno
-        const selectedAttack = attacks[e.currentTarget.innerHTML]
-         emby.attack({
-            attack: selectedAttack,
-            recipient: draggle,
-            renderedSprites
-        })
-    })
-})
+//  animate()
 
 // aggiungo la tastiera al gioco
 let lastKey = ''
