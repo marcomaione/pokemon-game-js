@@ -10,15 +10,17 @@ const battleBackground = new Sprite({
 })
 // aggiungo i mostricciattoli sul campo di battaglia
 
-const draggle = new Sprite(monsters.Draggle)
+const draggle = new Monster(monsters.Draggle)
 
-const emby = new Sprite(monsters.Emby)
+const emby = new Monster(monsters.Emby)
 
 const renderedSprites = [draggle, emby]
 
-const button = document.createElement('button')
-button.innerHTML = 'Fireball'
-document.querySelector('#attacksBox').append(button)
+emby.attacks.forEach((attack) => {
+    const button = document.createElement('button')
+    button.innerHTML = attack.name
+    document.querySelector('#attacksBox').append(button)
+})
 
 // funzione che inizializza la battaglia
 function animateBattle() {
@@ -43,16 +45,11 @@ document.querySelectorAll('button').forEach((button) =>{
             renderedSprites
         })
 
+        const randomAttack = draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)]
+
         coda.push(() => {
             draggle.attack({
-                attack: attacks.Tackle,
-                recipient: emby,
-                renderedSprites
-            })
-        })
-        coda.push(() => {
-            draggle.attack({
-                attack: attacks.Fireball,
+                attack: randomAttack,
                 recipient: emby,
                 renderedSprites
             })
