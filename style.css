@@ -1,42 +1,65 @@
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+/* regole generali */
+* {
     font-family: 'Press Start 2P', cursive;
-
+    box-sizing: border-box;
 }
 
 body {
     background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding-top: 100px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 16px;
 }
 
 button {
+    border: 0;
     cursor: pointer;
     font-size: 16px;
+}
+
+button:hover {
+    background-color: #ddd;
 }
 
 .container {
     display: inline-block;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #overlappingDiv {
     background-color: black;
+    position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    position: absolute;
     opacity: 0;
     pointer-events: none;
     z-index: 10;
 }
 
-#enemyHealthBar {
+#characterDialogueBox {
+    background-color: white;
+    height: 140px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 4px black solid;
+    display: none;
+    padding: 12px;
+}
+
+#userInterface {
+    display: none;
+}
+
+.barra-vita-nemico {
     background-color: white;
     width: 250px;
     position: absolute;
@@ -46,25 +69,44 @@ button {
     padding: 12px;
 }
 
-#playerHealthBar {
+.barra {
+    position: relative;
+}
+
+.barra-tot {
+    height: 5px;
+    background-color:#ccc;
+    margin-top: 10px
+}
+
+#enemyHealthBar {
+    height: 5px;
+    background-color: green;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.barra-vita {
     background-color: white;
     width: 250px;
     position: absolute;
-    top: 330px;
-    right: 50px;
+    top: 50px;
+    left: 50px;
     border: 4px black solid;
     padding: 12px;
 }
 
-.menu-battle {
-     background-color: white;
-     height: 140px;
-     position: absolute;
-     bottom: 0;
-     left: 0;
-     right: 0;
-     border-top: solid 4px black;
-     display: flex;
+.menu {
+    background-color: white;
+    height: 140px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 4px black solid;
+    display: flex;
 }
 
 #dialogueBox {
@@ -82,7 +124,7 @@ button {
 #attacksBox {
     width: 66.66%;
     display: grid;
-    grid-template-columns:repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 }
 
 .type {
@@ -90,35 +132,12 @@ button {
     align-items: center;
     justify-content: center;
     width: 33.33%;
-    border-left: 4px black solid ;
-}
-.barra-avanzamento {
-    position: relative;
-}
-.barra-stato {
-    height: 5px;
-    background-color: #ccc;
-    margin-top: 10px;
-}
-#barra-salute-enemy {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background-color: green;
-}
-#barra-salute {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background-color: green;
+    border-left: 4px black solid;
 }
 
-h1 {
-    margin: 0;
-    font-size: 16px;
+#attackType {
+    font-size: 16px
 }
+
+
 
