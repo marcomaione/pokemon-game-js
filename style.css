@@ -23,12 +23,15 @@ button:hover {
     background-color: #ddd;
 }
 
+/* regole */
+
 .container {
     display: inline-block;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 100px;
 }
 
 #overlappingDiv {
@@ -59,7 +62,7 @@ button:hover {
     display: none;
 }
 
-.barra-vita-nemico {
+.status-enemy {
     background-color: white;
     width: 250px;
     position: absolute;
@@ -67,13 +70,13 @@ button:hover {
     left: 50px;
     border: 4px black solid;
     padding: 12px;
-}
+} 
 
-.barra {
+.barra-avanzamento {
     position: relative;
 }
 
-.barra-tot {
+.barra {
     height: 5px;
     background-color:#ccc;
     margin-top: 10px
@@ -88,15 +91,25 @@ button:hover {
     right: 0;
 }
 
-.barra-vita {
+.status {
     background-color: white;
     width: 250px;
     position: absolute;
-    top: 50px;
-    left: 50px;
+    top: 330px;
+    right: 50px;
     border: 4px black solid;
     padding: 12px;
 }
+
+#playerHealthBar {
+    height: 5px;
+    background-color: green;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
 
 .menu {
     background-color: white;
@@ -137,7 +150,7 @@ button:hover {
 
 #attackType {
     font-size: 16px
-}
+} 
 
 
 
