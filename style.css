@@ -33,9 +33,10 @@ button {
     position: absolute;
     opacity: 0;
     pointer-events: none;
+    z-index: 10;
 }
 
-.status-enemy {
+#enemyHealthBar {
     background-color: white;
     width: 250px;
     position: absolute;
@@ -45,7 +46,7 @@ button {
     padding: 12px;
 }
 
-.status {
+#playerHealthBar {
     background-color: white;
     width: 250px;
     position: absolute;
@@ -66,7 +67,7 @@ button {
      display: flex;
 }
 
-#boxDialoghi {
+#dialogueBox {
     position: absolute;
     top: 0;
     right: 0;
