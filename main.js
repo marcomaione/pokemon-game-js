@@ -214,7 +214,7 @@ function animate() {
 
   if (battle.initiated) return
 
-  // activate a battle
+  // attivo la battaglia
   if (keys.w.pressed || keys.a.pressed || keys.s.pressed || keys.d.pressed) {
     for (let i = 0; i < battleZones.length; i++) {
       const battleZone = battleZones[i]
@@ -237,7 +237,7 @@ function animate() {
         overlappingArea > (player.width * player.height) / 2 &&
         Math.random() < 0.01
       ) {
-        // deactivate current animation loop
+        // disattivo il ciclo dell'animazione corrente
         window.cancelAnimationFrame(animationId)
 
         audio.Map.stop()
@@ -255,7 +255,7 @@ function animate() {
               opacity: 1,
               duration: 0.4,
               onComplete() {
-                // activate a new animation loop
+                // attivo un nuovo ciclo di animazione
                 initBattle()
                 animateBattle()
                 gsap.to('#overlappingDiv', {
@@ -421,7 +421,7 @@ window.addEventListener('keydown', (e) => {
           return
         }
 
-        // finish conversation
+        // fine conversazione
         player.isInteracting = false
         player.interactionAsset.dialogueIndex = 0
         document.querySelector('#characterDialogueBox').style.display = 'none'
@@ -430,12 +430,12 @@ window.addEventListener('keydown', (e) => {
     }
     return
   }
-
+// aggiungo la tastiera al gioco 
   switch (e.key) {
     case ' ':
       if (!player.interactionAsset) return
 
-      // beginning the conversation
+      // iniziare la conversazione
       const firstMessage = player.interactionAsset.dialogue[0]
       document.querySelector('#characterDialogueBox').innerHTML = firstMessage
       document.querySelector('#characterDialogueBox').style.display = 'flex'

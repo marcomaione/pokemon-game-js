@@ -1,7 +1,8 @@
+// creo le classi
 class Sprite {
     constructor({
       position,
-      velocity,
+      // velocity,
       image,
       frames = { max: 1, hold: 10 },
       sprites,
@@ -13,8 +14,8 @@ class Sprite {
       this.image = new Image()
       this.frames = { ...frames, val: 0, elapsed: 0 }
       this.image.onload = () => {
-        this.width = (this.image.width / this.frames.max) * scale
-        this.height = this.image.height * scale
+      this.width = (this.image.width / this.frames.max) * scale
+      this.height = this.image.height * scale
       }
       this.image.src = image.src
   
@@ -113,7 +114,7 @@ class Sprite {
     }
   
     faint() {
-      document.querySelector('#dialogueBox').innerHTML = this.name + ' fainted!'
+      document.querySelector('#dialogueBox').innerHTML = this.name + ' è esausto!'
       gsap.to(this.position, {
         y: this.position.y + 20
       })
@@ -198,7 +199,7 @@ class Sprite {
               x: this.position.x + movementDistance * 2,
               duration: 0.1,
               onComplete: () => {
-                // Enemy actually gets hit
+                // nemico viene colpito
                 audio.tackleHit.play()
                 gsap.to(healthBar, {
                   width: recipient.health + '%'
