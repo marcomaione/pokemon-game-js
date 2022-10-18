@@ -3,7 +3,7 @@ battleBackgroundImage.src = './img/battleBackground.png'
 const battleBackground = new Sprite({
   position: {
     x: 0,
-    y: 0
+    y: 0,
   },
   image: battleBackgroundImage
 })
@@ -66,7 +66,7 @@ function initBattle() {
         })
       }
 
-      // draggle or enemy attacks right here
+      // draggle(attacco nemico) generato in modo random
       const randomAttack =
         draggle.attacks[Math.floor(Math.random() * draggle.attacks.length)]
 
@@ -83,7 +83,7 @@ function initBattle() {
           })
 
           queue.push(() => {
-            // fade back to black
+            // ritorno alla schermata nera
             gsap.to('#overlappingDiv', {
               opacity: 1,
               onComplete: () => {
@@ -125,7 +125,7 @@ function animateBattle() {
 
 animate()
 // initBattle()
-// animateBattle()
+//animateBattle()
 
 document.querySelector('#dialogueBox').addEventListener('click', (e) => {
   if (queue.length > 0) {
